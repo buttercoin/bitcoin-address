@@ -1,7 +1,3 @@
-
-// 3rd party
-var int = require('int');
-
 // prep position lookup table
 var vals = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 var positions = {};
@@ -14,7 +10,7 @@ function base58_decode(payload) {
     var base = 58;
 
     var length = payload.length;
-    var num = int(0);
+    var num = new BigNumber(0);
     var leading_zero = 0;
     var seen_other = false;
     for (var i=0; i<length ; ++i) {
@@ -26,7 +22,7 @@ function base58_decode(payload) {
             throw new Error('invalid base58 string: ' + payload);
         }
 
-        num = num.mul(base).add(p);
+        num = num.times(base).plus(p);
 
         if (char == '1' && !seen_other) {
             ++leading_zero;
