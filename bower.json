@@ -1,0 +1,9 @@
+{
+  "name": "bitcoin-address",
+  "version": "0.0.1",
+  "dependencies": {
+    "crypto-js": "https://github.com/buttercoin/crypto-js.git#419c056298ef546d21f2b8dfd611f520f5bca81f"
+  },
+  "devDependencies": {
+  }
+}
