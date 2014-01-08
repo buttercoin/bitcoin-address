@@ -1,7 +1,4 @@
 
-// local
-var base58 = require('./base58');
-
 var address_types = {
     prod: '00',
     testnet: '6f'
@@ -21,7 +18,7 @@ function validate(address, address_type) {
     address_type = address_type || 'prod';
 
     try {
-        var decoded_hex = base58.decode(address);
+        var decoded_hex = base58_decode(address);
     } catch (e) {
         // if decoding fails, assume invalid address
         return false;
@@ -56,8 +53,6 @@ function validate(address, address_type) {
 
     return true;
 }
-
-module.exports.validate = validate;
 
 /// private methods
 

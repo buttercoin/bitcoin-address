@@ -10,7 +10,7 @@ for (var i=0 ; i < vals.length ; ++i) {
 }
 
 /// decode a base58 string payload into a hex representation
-function decode(payload) {
+function base58_decode(payload) {
     var base = 58;
 
     var length = payload.length;
@@ -49,5 +49,3 @@ function decode(payload) {
 
     return hex;
 }
-
-module.exports.decode = decode;
