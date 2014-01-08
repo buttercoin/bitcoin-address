@@ -1,7 +1,4 @@
 
-// builtin
-var crypto = require('crypto');
-
 // local
 var base58 = require('./base58');
 
@@ -66,7 +63,7 @@ module.exports.validate = validate;
 
 // helper to perform sha256 digest
 function sha256_digest(payload) {
-    return crypto.createHash('sha256').update(payload).digest('binary');
+    return CryptoJS.SHA256(payload);
 }
 
 
