@@ -2,47 +2,51 @@
   <head>
     <script src="../bower_components/bignumber.js/bignumber.js"></script>
     <script src="../bower_components/crypto-js/build/rollups/hmac-sha256.js"></script>
-    <script src="../base58.js"></script>
-    <script src="../index.js"></script>
+    <script src="../bitcoin-address.js"></script>
   </head>
   <body>
     <script>
 
-      console.log('Invalid');
-      console.log(validate(''));
-      console.log(validate('mzBc4XEFSdzCDcTxAgf6EZXgsZWpztRhe'));
-      console.log(validate('mzBc4XEFSdzCDcTxAgf6EZXgsZWpztRhef', 'prod'));
+      function test (expected, key, addressType) {
+        var result = validate(key, addressType);
+        var testResult = result === expected ? '<span style="color:green">SUCCESS</span>' : '<span style="color:red">FAILED</span>';
+        var out = testResult + ' validate(\'' + key + (typeof addressType === 'undefined' ? ('\', ' + addressType) : '') + ') = ' + (result ? 'true' : 'false');
+        document.write(out + '<br/>');
+      }
 
-      console.log(validate('bd839e4f6fadb293ba580df5dea7814399989983'));
-      console.log(validate('miCVC7QcY917Cz427qTBEUrvBzRapHrupc'));
-      console.log(validate('rrRmhfXzGBKbV4YHtbpxfA1ftEcry8AJaX'));
+      test(false, '');
+      test(false, 'mzBc4XEFSdzCDcTxAgf6EZXgsZWpztRhe');
+      test(false, 'mzBc4XEFSdzCDcTxAgf6EZXgsZWpztRhef', 'prod');
+
+      test(false, 'bd839e4f6fadb293ba580df5dea7814399989983');
+      test(false, 'miCVC7QcY917Cz427qTBEUrvBzRapHrupc');
+      test(false, 'rrRmhfXzGBKbV4YHtbpxfA1ftEcry8AJaX');
 
       // reject litecoin addresses
-      console.log(validate('LSxNsEQekEpXMS4B7tUYstMEdMyH321ZQ1', 'prod'));
+      test(false, 'LSxNsEQekEpXMS4B7tUYstMEdMyH321ZQ1', 'prod');
 
       // testnet
-      console.log(validate('1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 'testnet'));
+      test(false, '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 'testnfalse, et');
 
       // invalid base58 string
-      console.log(validate('%%@'));
+      test(false, '%%@');
 
 
-      console.log('Valid');
-      console.log(validate('1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'));
-      console.log(validate('1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 'prod'));
-      console.log(validate('mzBc4XEFSdzCDcTxAgf6EZXgsZWpztRhef', 'testnet'));
+      test(true, '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa');
+      test(true, '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 'prod');
+      test(true, 'mzBc4XEFSdzCDcTxAgf6EZXgsZWpztRhef', 'testnet');
 
-      console.log(validate('12KYrjTdVGjFMtaxERSk3gphreJ5US8aUP'));
-      console.log(validate('12QeMLzSrB8XH8FvEzPMVoRxVAzTr5XM2y'));
-      console.log(validate('1oNLrsHnBcR6dpaBpwz3LSwutbUNkNSjs'));
-      console.log(validate('1SQHtwR5oJRKLfiWQ2APsAd9miUc4k2ez'));
-      console.log(validate('116CGDLddrZhMrTwhCVJXtXQpxygTT1kHd'));
+      test(true, '12KYrjTdVGjFMtaxERSk3gphreJ5US8aUP');
+      test(true, '12QeMLzSrB8XH8FvEzPMVoRxVAzTr5XM2y');
+      test(true, '1oNLrsHnBcR6dpaBpwz3LSwutbUNkNSjs');
+      test(true, '1SQHtwR5oJRKLfiWQ2APsAd9miUc4k2ez');
+      test(true, '116CGDLddrZhMrTwhCVJXtXQpxygTT1kHd');
 
       // p2sh addresses
-      console.log(validate('3NJZLcZEEYBpxYEUGewU4knsQRn1WM5Fkt'));
-      console.log(validate('3NJZLcZEEYBpxYEUGewU4knsQRn1WM5Fkt', 'prod'));
-      console.log(validate('2MxKEf2su6FGAUfCEAHreGFQvEYrfYNHvL7', 'testnet'));
-      
+      test(true, '3NJZLcZEEYBpxYEUGewU4knsQRn1WM5Fkt');
+      test(true, '3NJZLcZEEYBpxYEUGewU4knsQRn1WM5Fkt', 'prod');
+      test(true, '2MxKEf2su6FGAUfCEAHreGFQvEYrfYNHvL7', 'testnet');
+
     </script>
   </body>
 </html>
