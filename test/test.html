@@ -8,7 +8,7 @@
     <script>
 
       function test (expected, key, addressType) {
-        var result = validate(key, addressType);
+        var result = BitcoinAddress.validate(key, addressType);
         var testResult = result === expected ? '<span style="color:green">SUCCESS</span>' : '<span style="color:red">FAILED</span>';
         var out = testResult + ' validate(\'' + key + (typeof addressType === 'undefined' ? ('\', ' + addressType) : '') + ') = ' + (result ? 'true' : 'false');
         document.write(out + '<br/>');

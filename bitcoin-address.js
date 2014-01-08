@@ -1,110 +1,114 @@
+var BitcoinAddress = {};
 
-var address_types = {
-    prod: '00',
-    testnet: '6f'
-};
+(function() {
 
-var p2sh_types = {
-    prod: '05',
-    testnet: 'c4'
-};
+    var address_types = {
+        prod: '00',
+        testnet: '6f'
+    };
 
-/// check if a wallet address is valid
-/// if address_type is supplied
-/// also checks that the address matches that expected version
-/// return {boolean} true if valid, false otherwise
-function validate(address, address_type) {
-    // default is to check that address is regular production address
-    address_type = address_type || 'prod';
+    var p2sh_types = {
+        prod: '05',
+        testnet: 'c4'
+    };
 
-    try {
-        var decoded_hex = base58_decode(address);
-    } catch (e) {
-        // if decoding fails, assume invalid address
-        return false;
-    }
+    /// check if a wallet address is valid
+    /// if address_type is supplied
+    /// also checks that the address matches that expected version
+    /// return {boolean} true if valid, false otherwise
+    this.validate = function (address, address_type) {
+        // default is to check that address is regular production address
+        address_type = address_type || 'prod';
 
-    // make a usable buffer from the decoded data
-    var decoded = decoded_hex;
-
-    // should be 25 bytes per btc address spec
-    if (decoded.length != 50) {
-        return false;
-    }
-
-    var length = decoded.length;
-    var cksum = decoded.slice(length - 8, length);
-    var body = decoded.slice(0, length - 8);
-
-    var good_cksum = sha256_digest(sha256_digest(CryptoJS.enc.Hex.parse(body))).toString().substr(0,8);
-
-    if (cksum !== good_cksum) {
-        return false;
-    }
-
-    // check that the address type is correct if requested
-    if (address_type) {
-        var type = decoded_hex.slice(0, 2);
-        if (type !== address_types[address_type] &&
-            type !== p2sh_types[address_type]) {
+        try {
+            var decoded_hex = base58_decode(address);
+        } catch (e) {
+            // if decoding fails, assume invalid address
             return false;
         }
-    }
 
-    return true;
-}
+        // make a usable buffer from the decoded data
+        var decoded = decoded_hex;
 
-/// private methods
-
-// helper to perform sha256 digest
-function sha256_digest(payload) {
-    return CryptoJS.SHA256(payload);
-}
-
-// prep position lookup table
-var vals = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-var positions = {};
-for (var i=0 ; i < vals.length ; ++i) {
-    positions[vals[i]] = new BigNumber(i);
-}
-
-/// decode a base58 string payload into a hex representation
-function base58_decode(payload) {
-    var base = new BigNumber(58);
-
-    var length = payload.length;
-    var num = new BigNumber(0);
-    var leading_zero = 0;
-    var seen_other = false;
-    for (var i=0; i<length ; ++i) {
-        var char = payload[i];
-        var p = positions[char];
-
-        // if we encounter an invalid character, decoding fails
-        if (p === undefined) {
-            throw new Error('invalid base58 string: ' + payload);
+        // should be 25 bytes per btc address spec
+        if (decoded.length != 50) {
+            return false;
         }
 
-        num = num.times(base).plus(p);
+        var length = decoded.length;
+        var cksum = decoded.slice(length - 8, length);
+        var body = decoded.slice(0, length - 8);
 
-        if (char == '1' && !seen_other) {
-            ++leading_zero;
+        var good_cksum = sha256_digest(sha256_digest(CryptoJS.enc.Hex.parse(body))).toString().substr(0,8);
+
+        if (cksum !== good_cksum) {
+            return false;
         }
-        else {
-            seen_other = true;
+
+        // check that the address type is correct if requested
+        if (address_type) {
+            var type = decoded_hex.slice(0, 2);
+            if (type !== address_types[address_type] &&
+                type !== p2sh_types[address_type]) {
+                return false;
+            }
         }
+
+        return true;
     }
 
-    var hex = num.toString(16);
+    /// private methods
 
-    // num.toString(16) does not have leading 0
-    if (hex.length % 2 !== 0) {
-        hex = '0' + hex;
+    // helper to perform sha256 digest
+    function sha256_digest(payload) {
+        return CryptoJS.SHA256(payload);
     }
 
-    while (leading_zero-- > 0) {
-        hex = '00' + hex;
+    // prep position lookup table
+    var vals = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+    var positions = {};
+    for (var i=0 ; i < vals.length ; ++i) {
+        positions[vals[i]] = new BigNumber(i);
     }
 
-    return hex;
-}
+    /// decode a base58 string payload into a hex representation
+    function base58_decode(payload) {
+        var base = new BigNumber(58);
+
+        var length = payload.length;
+        var num = new BigNumber(0);
+        var leading_zero = 0;
+        var seen_other = false;
+        for (var i=0; i<length ; ++i) {
+            var char = payload[i];
+            var p = positions[char];
+
+            // if we encounter an invalid character, decoding fails
+            if (p === undefined) {
+                throw new Error('invalid base58 string: ' + payload);
+            }
+
+            num = num.times(base).plus(p);
+
+            if (char == '1' && !seen_other) {
+                ++leading_zero;
+            }
+            else {
+                seen_other = true;
+            }
+        }
+
+        var hex = num.toString(16);
+
+        // num.toString(16) does not have leading 0
+        if (hex.length % 2 !== 0) {
+            hex = '0' + hex;
+        }
+
+        while (leading_zero-- > 0) {
+            hex = '00' + hex;
+        }
+
+        return hex;
+    }
+}).call(BitcoinAddress);
