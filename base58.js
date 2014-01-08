@@ -2,12 +2,12 @@
 var vals = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 var positions = {};
 for (var i=0 ; i < vals.length ; ++i) {
-    positions[vals[i]] = i;
+    positions[vals[i]] = new BigNumber(i);
 }
 
 /// decode a base58 string payload into a hex representation
 function base58_decode(payload) {
-    var base = 58;
+    var base = new BigNumber(58);
 
     var length = payload.length;
     var num = new BigNumber(0);

@@ -25,18 +25,18 @@ function validate(address, address_type) {
     }
 
     // make a usable buffer from the decoded data
-    var decoded = new Buffer(decoded_hex, 'hex');
+    var decoded = decoded_hex;
 
     // should be 25 bytes per btc address spec
-    if (decoded.length != 25) {
+    if (decoded.length != 50) {
         return false;
     }
 
     var length = decoded.length;
-    var cksum = decoded.slice(length - 4, length).toString('binary');
-    var body = decoded.slice(0, length - 4);
+    var cksum = decoded.slice(length - 8, length);
+    var body = decoded.slice(0, length - 8);
 
-    var good_cksum = sha256_digest(sha256_digest(body)).substr(0,4);
+    var good_cksum = sha256_digest(sha256_digest(CryptoJS.enc.Hex.parse(body))).toString().substr(0,8);
 
     if (cksum !== good_cksum) {
         return false;
