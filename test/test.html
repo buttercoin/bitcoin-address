@@ -1,51 +1,57 @@
 <html>
   <head>
+    <script src="../bower_components/angular/angular.js"></script>
     <script src="../bower_components/bignumber.js/bignumber.js"></script>
     <script src="../bower_components/crypto-js/build/rollups/hmac-sha256.js"></script>
     <script src="../bitcoin-address.js"></script>
   </head>
-  <body>
+  <body ng-app="bitcoinAddressTestApp" ng-controller="MainCtrl">
     <script>
 
-      function test (expected, key, addressType) {
-        var result = BitcoinAddress.validate(key, addressType);
-        var testResult = result === expected ? '<span style="color:green">SUCCESS</span>' : '<span style="color:red">FAILED</span>';
-        var out = testResult + ' validate(\'' + key + (typeof addressType === 'undefined' ? ('\', ' + addressType) : '') + ') = ' + (result ? 'true' : 'false');
-        document.write(out + '<br/>');
-      }
+      angular.module('bitcoinAddressTestApp', ['bc.bitcoin-address'])
+                       .controller('MainCtrl', function (BitcoinAddress) {
 
-      test(false, '');
-      test(false, 'mzBc4XEFSdzCDcTxAgf6EZXgsZWpztRhe');
-      test(false, 'mzBc4XEFSdzCDcTxAgf6EZXgsZWpztRhef', 'prod');
+        function test (expected, key, addressType) {
+          var result = BitcoinAddress.validate(key, addressType);
+          var testResult = result === expected ? '<span style="color:green">SUCCESS</span>' : '<span style="color:red">FAILED</span>';
+          var out = testResult + ' validate(\'' + key + (typeof addressType === 'undefined' ? ('\', ' + addressType) : '') + ') = ' + (result ? 'true' : 'false');
+          document.write(out + '<br/>');
+        }
 
-      test(false, 'bd839e4f6fadb293ba580df5dea7814399989983');
-      test(false, 'miCVC7QcY917Cz427qTBEUrvBzRapHrupc');
-      test(false, 'rrRmhfXzGBKbV4YHtbpxfA1ftEcry8AJaX');
+        test(false, '');
+        test(false, 'mzBc4XEFSdzCDcTxAgf6EZXgsZWpztRhe');
+        test(false, 'mzBc4XEFSdzCDcTxAgf6EZXgsZWpztRhef', 'prod');
 
-      // reject litecoin addresses
-      test(false, 'LSxNsEQekEpXMS4B7tUYstMEdMyH321ZQ1', 'prod');
+        test(false, 'bd839e4f6fadb293ba580df5dea7814399989983');
+        test(false, 'miCVC7QcY917Cz427qTBEUrvBzRapHrupc');
+        test(false, 'rrRmhfXzGBKbV4YHtbpxfA1ftEcry8AJaX');
 
-      // testnet
-      test(false, '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 'testnfalse, et');
+        // reject litecoin addresses
+        test(false, 'LSxNsEQekEpXMS4B7tUYstMEdMyH321ZQ1', 'prod');
 
-      // invalid base58 string
-      test(false, '%%@');
+        // testnet
+        test(false, '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 'testnfalse, et');
+
+        // invalid base58 string
+        test(false, '%%@');
 
 
-      test(true, '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa');
-      test(true, '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 'prod');
-      test(true, 'mzBc4XEFSdzCDcTxAgf6EZXgsZWpztRhef', 'testnet');
+        test(true, '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa');
+        test(true, '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 'prod');
+        test(true, 'mzBc4XEFSdzCDcTxAgf6EZXgsZWpztRhef', 'testnet');
 
-      test(true, '12KYrjTdVGjFMtaxERSk3gphreJ5US8aUP');
-      test(true, '12QeMLzSrB8XH8FvEzPMVoRxVAzTr5XM2y');
-      test(true, '1oNLrsHnBcR6dpaBpwz3LSwutbUNkNSjs');
-      test(true, '1SQHtwR5oJRKLfiWQ2APsAd9miUc4k2ez');
-      test(true, '116CGDLddrZhMrTwhCVJXtXQpxygTT1kHd');
+        test(true, '12KYrjTdVGjFMtaxERSk3gphreJ5US8aUP');
+        test(true, '12QeMLzSrB8XH8FvEzPMVoRxVAzTr5XM2y');
+        test(true, '1oNLrsHnBcR6dpaBpwz3LSwutbUNkNSjs');
+        test(true, '1SQHtwR5oJRKLfiWQ2APsAd9miUc4k2ez');
+        test(true, '116CGDLddrZhMrTwhCVJXtXQpxygTT1kHd');
 
-      // p2sh addresses
-      test(true, '3NJZLcZEEYBpxYEUGewU4knsQRn1WM5Fkt');
-      test(true, '3NJZLcZEEYBpxYEUGewU4knsQRn1WM5Fkt', 'prod');
-      test(true, '2MxKEf2su6FGAUfCEAHreGFQvEYrfYNHvL7', 'testnet');
+        // p2sh addresses
+        test(true, '3NJZLcZEEYBpxYEUGewU4knsQRn1WM5Fkt');
+        test(true, '3NJZLcZEEYBpxYEUGewU4knsQRn1WM5Fkt', 'prod');
+        test(true, '2MxKEf2su6FGAUfCEAHreGFQvEYrfYNHvL7', 'testnet');
+
+      });
 
     </script>
   </body>
