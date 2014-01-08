@@ -1,12 +1,8 @@
-# bitcoin-address [![Build Status](https://secure.travis-ci.org/defunctzombie/bitcoin-address.png)](http://travis-ci.org/defunctzombie/bitcoin-address) #
+# bitcoin-address #
+
+This is a browser-friendly version of the bitcoin-address repo working with bower.
 
 Functions for working with bitcoin addresses
-
-## install ##
-
-```
-npm install bitcoin-address
-```
 
 ## API ##
 
