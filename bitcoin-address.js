@@ -1,5 +1,4 @@
-define(['bignumber', 'sha256'], function(BigNumber) {
-  'use strict';
+(function() {
   angular.module('bc.bitcoin-address', []).service('BitcoinAddress', [function () {
 
     var address_types = {
@@ -115,4 +114,5 @@ define(['bignumber', 'sha256'], function(BigNumber) {
   }]);
 
   return this;
-});
+
+}).call(this);
