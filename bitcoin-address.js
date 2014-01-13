@@ -113,4 +113,6 @@ define(['bignumber', 'sha256'], function(BigNumber) {
     }
 
   }]);
+
+  return this;
 });
