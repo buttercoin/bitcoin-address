@@ -1,4 +1,4 @@
-(function() {
+require(['bignumber'], function(BigNumber) {
   angular.module('bc.bitcoin-address', []).service('BitcoinAddress', [function () {
 
     var address_types = {
@@ -112,7 +112,4 @@
     }
 
   }]);
-
-  return this;
-
-}).call(this);
+});
