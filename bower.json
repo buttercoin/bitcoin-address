@@ -1,6 +1,6 @@
 {
   "name": "bitcoin-address",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "bitcoin-address.js",
   "dependencies": {
     "angular": "1.2.8",
