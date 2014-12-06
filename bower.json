@@ -5,6 +5,6 @@
   "dependencies": {
     "angular": "1.2.8",
     "crypto-js": "https://github.com/buttercoin/crypto-js.git#419c056298ef546d21f2b8dfd611f520f5bca81f",
-    "bignumber": "https://github.com/buttercoin/bignumber.js.git#7d721f9894a0f3afe82b967b707c4d736fa5b422"
+    "bignumber.js": "1.5.0"
   }
 }
